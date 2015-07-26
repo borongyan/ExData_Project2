@@ -29,6 +29,14 @@ if(!exists('NEI') | !exists('SCC')) {
   allEmissionsPerYear <- aggregate(Emissions ~ year, NEI, sum)
   baltimore.data <- subset(NEI, fips == "24510")
   baltimore.emissionsPerYear <- tapply(baltimore.data$Emissions, baltimore.data$year, sum)
+  baltimore.onRoadEmissions <- aggregate(Emissions ~ year,
+                                         baltimore.data[baltimore.data$type=='ON-ROAD',],
+                                         sum)
+  losAngeles.data <- subset(NEI, fips == "06037")
+  losAngeles.emissionsPerYear <- tapply(losAngeles.data$Emissions, losAngeles.data$year, sum)
+  losAngeles.onRoadEmissions <- aggregate(Emissions ~ year,
+                                         losAngeles.data[losAngeles.data$type=='ON-ROAD',],
+                                         sum)
   
   message('setup complete')
 }
