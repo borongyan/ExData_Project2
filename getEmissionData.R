@@ -16,11 +16,19 @@ retrieveDataFiles <- function() {
 ## retrieve emission data if not found in environment
 if(!exists('NEI') | !exists('SCC')) {
   message('required data frames do not exist')
+  
   ## check for RDS files
   if(!file.exists('summarySCC_PM25.rds') && !file.exists('Source_Classification_Code.rds')) retrieveDataFiles()
+  
   ## read data from files
   message('reading data...')
   NEI <- readRDS("summarySCC_PM25.rds")
   SCC <- readRDS("Source_Classification_Code.rds")
+  
+  ## subset data
+  allEmissionsPerYear <- aggregate(Emissions ~ year, NEI, sum)
+  baltimore.data <- subset(NEI, fips == "24510")
+  baltimore.emissionsPerYear <- tapply(baltimore.data$Emissions, baltimore.data$year, sum)
+  
   message('setup complete')
 }
